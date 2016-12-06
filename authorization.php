@@ -13,12 +13,14 @@ $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
 
 $oauth_credentials = getOAuthCredentialsFile();
 
+global $client;
 $client = new Google_Client();
 $client->setAuthConfig($oauth_credentials);
 $client->setRedirectUri($redirect_uri);
 $client->addScope("https://www.googleapis.com/auth/drive");
-$service = new Google_Service_Drive($client);
-setcookie("client", json_encode($client));
+global $driveService;
+$driveService = new Google_Service_Drive($client);
+$GLOBALS['service'] = $driveService;
 
 if (isset($_REQUEST['logout'])) {
   unset($_SESSION['upload_token']);
@@ -43,15 +45,10 @@ if (
 
 $client->getAccessToken();
 ?> 
-
-<link href="css/dropzone.css" type="text/css" rel="stylesheet" />
-<script src="dropzone.js"></script>
 <div class="box">
     <?php if (isset($authUrl)): ?>
     <div class="request">
         <a href='<?= $authUrl ?>'>Connect Me!</a>
-    </div>
-    <?php else: ?>
-        <form action="upload.php" class="dropzone"></form>
+    </div> 
     <?php endif ?>
 </div>
