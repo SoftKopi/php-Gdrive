@@ -18,7 +18,6 @@ function search_directory ($folder_name, $folder_parent_id, $driveService) {
     $search_folderId = "";
 
     $search_folderId = $response->files[0]->id;
-    echo $search_folderId;
 
     /*foreach ($response->files as $file_info) {
         printf("Found file: (%s)\n", $file_info->id);
