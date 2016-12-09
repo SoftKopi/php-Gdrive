@@ -25,7 +25,7 @@ function get_rules ($rules_file_path) {
 }
 
 //upload to Google Drive
-function upload_on_cloud ($file_to_upload, $file_name, $folderId) {
+function upload_on_cloud ($file_to_upload, $file_name, $folderId, $driveService) {
     $file = new Google_Service_Drive_DriveFile(array(
         'name' => $file_name,
         'parents' => array($folderId)

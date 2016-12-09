@@ -12,7 +12,7 @@ if (!empty($_FILES)) {
     $temp_file_name = $_FILES['userfile']['name'];
     $rules = get_rules("rules.txt");
     if(check_file_name($rules[0]->reg_expr_array, $temp_file_name)==1){
-        upload_on_cloud($temp_file, $temp_file_name, get_directory($rules[0]->folder_name));
+        upload_on_cloud($temp_file, $temp_file_name, get_directory($rules[0]->folder_name, $driveService), $driveService);
     }
     move_uploaded_file($_FILES['userfile']['tmp_name'], $trash_file);
     unlink($trash_file);
