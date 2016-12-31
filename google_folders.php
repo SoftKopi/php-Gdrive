@@ -39,7 +39,7 @@ function search_directory ($folder_name, $folder_parent_id, $driveService) {
 //get folder Id for upload;
 function get_directory ($folder_path, $driveService) {
     $folders = explode('/', $folder_path);
-    $folder_id = "0ABdFR4K6P8E3Uk9PVA"; // input root id of new profile;
+    $folder_id = "0ABdFR4K6P8E3Uk9PVA"; // WARNING! input root id of new profile here, this is root of my group account;
     for ($folders_counter = 0; $folders_counter < count($folders); $folders_counter++) {
         $folder_id = search_directory($folders[$folders_counter], $folder_id, $driveService);
     };

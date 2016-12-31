@@ -3,9 +3,9 @@ include_once ("authorization.php");
 
 function download_directory ($folderId, $folder_name, $driveService, $folder_path) {
     if ($folder_path=="") {
-        $folder_path = __DIR__ . "/downloads/$folder_name";
+        $folder_path = __DIR__ . "\\downloads\\$folder_name";
         if (!file_exists($folder_path)) {
-            mkdir(__DIR__ . "/downloads/$folder_name", 0777, true);
+            mkdir(__DIR__ . "\\downloads\\$folder_name", 0777, true);
         }
     }
     
@@ -18,6 +18,7 @@ function download_directory ($folderId, $folder_name, $driveService, $folder_pat
             'pageToken' => $pageToken,
             'fields' => 'nextPageToken, files(id, mimeType, name)',
         ));
+        echo "Getting list <br \>";
     } while ($pageToken != null);
 
     //use info
@@ -25,7 +26,7 @@ function download_directory ($folderId, $folder_name, $driveService, $folder_pat
         //if file is folder
         if ($file->mimeType == 'application/vnd.google-apps.folder') {
             $new_folder_name = $file->name;
-            $new_folder_path = "$folder_path/$new_folder_name";
+            $new_folder_path = "$folder_path\\$new_folder_name";
             $new_folder_id = $file->id;
             //create new folder in /downloads
             if (!file_exists($new_folder_path)) {
@@ -36,13 +37,20 @@ function download_directory ($folderId, $folder_name, $driveService, $folder_pat
         }
         //else download file in working directory
         else {
-            $content = $driveService->files->get($file->id, array(
+            echo "Here is JOHNY, file id:  $file->id <br \>";
+            $file_to_download_id = $file->id;
+            $content = $driveService->files->get($file_to_download_id, array(
                 'alt' => 'media' ));
-            rename ($file->name, "$folder_path/$file->name");
+            $outHandle = fopen("$folder_path\\$file->name", "w+");
+            while (!$content->getBody()->eof()) {
+                fwrite($outHandle, $content->getBody()->read(1024));
+            }
+            fclose($outHandle);
         }
     }
 }
 
+//let's test this, folderID belongs to "test" folder in my group googledrive account
 download_directory("0BxdFR4K6P8E3eHRPTmo2aU81VU0", "test", $driveService, "");
 
 ?>
